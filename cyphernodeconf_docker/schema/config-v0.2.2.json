@@ -84,6 +84,45 @@
           "bitcoin_prune_size"
         ]
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "features": {
+            "contains": {
+              "type": "string",
+              "enum": ["lightning"]
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "lightning_announce",
+          "lightning_expose",
+          "lightning_implementation",
+          "lightning_datapath",
+          "lightning_nodename",
+          "lightning_nodecolor"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "features": {
+            "contains": {
+              "type": "string",
+              "enum": ["otsclient"]
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "otsclient_datapath"
+        ]
+      }
     }
   ],
   "properties": {
