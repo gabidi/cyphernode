@@ -158,6 +158,17 @@ services:
     restart: always
 <% } %>
 
+<% if ( features.indexOf('wasabi') !== -1 ) { %>
+<%   for ( let index=0; index<wasabi_instance_count; index++ ) { %>
+  wasabi_<%= index %>:
+    image: cyphernode/wasabi:<%= wasabi_version %>
+    volumes:
+      - "<%= wasabi_datapath %>/<%= index %>:/root/.walletwasabi/client"
+    networks:
+      - cyphernodenet
+    restart: always
+<%   } %>
+<% } %>
 <% if( bitcoin_mode === 'internal' ) { %>
   bitcoin:
     command: $USER bitcoind
