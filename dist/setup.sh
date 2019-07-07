@@ -192,6 +192,7 @@ configure() {
              -e PYCOIN_VERSION=$PYCOIN_VERSION \
              -e BITCOIN_VERSION=$BITCOIN_VERSION \
              -e LIGHTNING_VERSION=$LIGHTNING_VERSION \
+             -e WASABI_VERSION=$WASABI_VERSION \
              -e SETUP_VERSION=$SETUP_VERSION \
              --log-driver=none$pw_env \
              --network none \
@@ -474,6 +475,18 @@ install_docker() {
     fi
   fi
 
+  if [[ $FEATURE_WASABI == true ]]; then
+    if [ ! -d $WASABI_DATAPATH ]; then
+      for ((i=1;i<$WASABI_INSTANCE_COUNT;i++));
+      do
+        step "   [32mcreate[0m $WASABI_DATAPATH/$i"
+        sudo_if_required mkdir -p $WASABI_DATAPATH/$i
+        copy_file "$cyphernodeconf_filepath/wasabi/Config.json" "$WASABI_DATAPATH/$i/Config.json" 1 $SUDO_REQUIRED
+        next
+      done
+    fi
+  fi
+
   docker swarm join-token worker > /dev/null 2>&1
   local noSwarm=$?;
 
@@ -719,6 +732,7 @@ OTSCLIENT_VERSION="v0.2.1"
 PYCOIN_VERSION="v0.2.1"
 BITCOIN_VERSION="v0.18.0"
 LIGHTNING_VERSION="v0.7.1"
+WASABI_VERSION="v0.2.1"
 
 SETUP_DIR=$(dirname $(realpath $0))
 
@@ -776,6 +790,7 @@ if [[ $nbbuiltimgs -gt 1 ]]; then
     PROXYCRON_VERSION="$PROXYCRON_VERSION-local"
     OTSCLIENT_VERSION="$OTSCLIENT_VERSION-local"
     PYCOIN_VERSION="$PYCOIN_VERSION-local"
+    WASABI_VERSION="$WASABI_VERSION-local"
   fi
 fi
 
